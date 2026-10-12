@@ -1,29 +1,31 @@
 # Plugin Registry Server - Laravel API
 
-## 📋 專案概述
+**English** | [繁體中文](README.zh-TW.md)
 
-這是使用 Laravel 框架開發的 Plugin Registry Server API，提供插件管理、版本控制、用戶認證等功能。
+## 📋 Overview
 
-## 🚀 快速開始
+A Plugin Registry Server API built with Laravel. It provides plugin management, versioning, and user authentication.
 
-### 1. 安裝依賴
+## 🚀 Quick start
+
+### 1. Install dependencies
 
 ```bash
 composer install
 ```
 
-### 2. 設置環境變數
+### 2. Set environment variables
 
-複製 `.env.example` 為 `.env` 並配置：
+Copy `.env.example` to `.env` and configure it:
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-### 3. 配置資料庫
+### 3. Configure the database
 
-在 `.env` 中設置資料庫連接：
+Set the database connection in `.env`:
 
 ```env
 DB_CONNECTION=pgsql
@@ -34,9 +36,9 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 ```
 
-### 4. 配置 S3（可選）
+### 4. Configure S3 (optional)
 
-如果要使用 S3 儲存：
+To use S3 storage:
 
 ```env
 FILESYSTEM_DISK=s3
@@ -46,21 +48,21 @@ AWS_DEFAULT_REGION=ap-northeast-1
 AWS_BUCKET=plugin-registry-storage
 ```
 
-### 5. 執行資料庫遷移
+### 5. Run migrations
 
 ```bash
 php artisan migrate
 ```
 
-### 6. 啟動開發伺服器
+### 6. Start the development server
 
 ```bash
 php artisan serve
 ```
 
-API 將在 `http://localhost:8000` 運行。
+The API runs at `http://localhost:8000`.
 
-## 📁 專案結構
+## 📁 Project structure
 
 ```
 api/
@@ -68,11 +70,11 @@ api/
 │   ├── Http/
 │   │   └── Controllers/
 │   │       └── Api/
-│   │           ├── AuthController.php      # 認證控制器
-│   │           ├── PluginController.php    # 插件控制器
-│   │           ├── PluginVersionController.php  # 版本控制器
-│   │           ├── SearchController.php    # 搜尋控制器
-│   │           └── StatsController.php    # 統計控制器
+│   │           ├── AuthController.php      # Authentication
+│   │           ├── PluginController.php    # Plugins
+│   │           ├── PluginVersionController.php  # Versions
+│   │           ├── SearchController.php    # Search
+│   │           └── StatsController.php    # Statistics
 │   ├── Models/
 │   │   ├── User.php
 │   │   ├── Plugin.php
@@ -81,62 +83,62 @@ api/
 │   │   ├── PluginDependency.php
 │   │   └── ApiKey.php
 │   └── Services/
-│       └── StorageService.php              # S3 儲存服務
+│       └── StorageService.php              # S3 storage service
 ├── database/
-│   └── migrations/                          # 資料庫遷移
+│   └── migrations/                          # Database migrations
 ├── routes/
-│   └── api.php                              # API 路由
+│   └── api.php                              # API routes
 └── config/
-    ├── jwt.php                              # JWT 配置
-    └── filesystems.php                      # 檔案系統配置
+    ├── jwt.php                              # JWT config
+    └── filesystems.php                      # Filesystem config
 ```
 
-## 🔌 API 端點
+## 🔌 API endpoints
 
-### 認證 API
+### Auth API
 
-- `POST /api/v1/auth/register` - 註冊
-- `POST /api/v1/auth/login` - 登入
-- `POST /api/v1/auth/refresh` - 刷新 Token
-- `POST /api/v1/auth/logout` - 登出（需要認證）
-- `GET /api/v1/auth/me` - 獲取當前用戶（需要認證）
+- `POST /api/v1/auth/register` - Register
+- `POST /api/v1/auth/login` - Log in
+- `POST /api/v1/auth/refresh` - Refresh token
+- `POST /api/v1/auth/logout` - Log out (auth required)
+- `GET /api/v1/auth/me` - Get current user (auth required)
 
-### 插件 API
+### Plugin API
 
-- `GET /api/v1/plugins` - 列出所有插件
-- `GET /api/v1/plugins/{plugin}` - 獲取插件詳情
-- `POST /api/v1/plugins` - 發布新插件（需要認證）
-- `PUT /api/v1/plugins/{plugin}` - 更新插件（需要認證）
-- `DELETE /api/v1/plugins/{plugin}` - 刪除插件（需要認證）
+- `GET /api/v1/plugins` - List all plugins
+- `GET /api/v1/plugins/{plugin}` - Get plugin details
+- `POST /api/v1/plugins` - Publish a new plugin (auth required)
+- `PUT /api/v1/plugins/{plugin}` - Update a plugin (auth required)
+- `DELETE /api/v1/plugins/{plugin}` - Delete a plugin (auth required)
 
-### 版本 API
+### Version API
 
-- `GET /api/v1/plugins/{plugin}/versions` - 獲取所有版本
-- `GET /api/v1/plugins/{plugin}/versions/{version}` - 獲取特定版本
-- `POST /api/v1/plugins/{plugin}/versions` - 發布新版本（需要認證）
-- `GET /api/v1/plugins/{plugin}/versions/{version}/download` - 下載插件（需要認證）
+- `GET /api/v1/plugins/{plugin}/versions` - List all versions
+- `GET /api/v1/plugins/{plugin}/versions/{version}` - Get a specific version
+- `POST /api/v1/plugins/{plugin}/versions` - Publish a new version (auth required)
+- `GET /api/v1/plugins/{plugin}/versions/{version}/download` - Download a plugin (auth required)
 
-### 搜尋 API
+### Search API
 
-- `GET /api/v1/search` - 進階搜尋
+- `GET /api/v1/search` - Advanced search
 
-### 統計 API
+### Stats API
 
-- `GET /api/v1/stats` - 平台統計
+- `GET /api/v1/stats` - Platform statistics
 
-## 🔐 認證
+## 🔐 Authentication
 
-API 使用 JWT (JSON Web Token) 進行認證。
+The API uses JWT (JSON Web Token) authentication.
 
-### 使用方式
+### Usage
 
-在請求頭中添加：
+Add this request header:
 
 ```
 Authorization: Bearer {token}
 ```
 
-### 獲取 Token
+### Getting a token
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
@@ -147,7 +149,7 @@ curl -X POST http://localhost:8000/api/v1/auth/login \
   }'
 ```
 
-回應：
+Response:
 
 ```json
 {
@@ -161,63 +163,63 @@ curl -X POST http://localhost:8000/api/v1/auth/login \
 }
 ```
 
-## 📦 資料庫結構
+## 📦 Database schema
 
-- **users** - 用戶表
-- **plugins** - 插件表
-- **plugin_versions** - 插件版本表
-- **plugin_reviews** - 插件評論表
-- **plugin_dependencies** - 插件依賴表
-- **api_keys** - API 金鑰表
+- **users** - users
+- **plugins** - plugins
+- **plugin_versions** - plugin versions
+- **plugin_reviews** - plugin reviews
+- **plugin_dependencies** - plugin dependencies
+- **api_keys** - API keys
 
-## 🛠️ 開發
+## 🛠️ Development
 
-### 執行測試
+### Run tests
 
 ```bash
 php artisan test
 ```
 
-### 資料庫遷移
+### Migrations
 
 ```bash
-# 建立遷移
+# Create a migration
 php artisan make:migration create_table_name
 
-# 執行遷移
+# Run migrations
 php artisan migrate
 
-# 回滾遷移
+# Roll back
 php artisan migrate:rollback
 ```
 
-### 建立模型
+### Create a model
 
 ```bash
 php artisan make:model ModelName
 ```
 
-### 建立控制器
+### Create a controller
 
 ```bash
 php artisan make:controller Api/ControllerName
 ```
 
-## 📚 相關文件
+## 📚 References
 
-- [Laravel 文檔](https://laravel.com/docs)
-- [JWT Auth 文檔](https://jwt-auth.readthedocs.io/)
+- [Laravel docs](https://laravel.com/docs)
+- [JWT Auth docs](https://jwt-auth.readthedocs.io/)
 - [AWS S3 SDK](https://docs.aws.amazon.com/sdk-for-php/)
 
-## 🔗 與 Agent-Foundry 整合
+## 🔗 Agent-Foundry integration
 
-Agent-Foundry CLI 可以通過以下方式使用此 API：
+The Agent-Foundry CLI uses this API like this:
 
 ```python
-# 設置註冊表 URL
+# Set the registry URL
 REMOTE_REGISTRY_URL = "https://registry.agent-foundry.org/api/v1"
 
-# 下載插件
+# Download a plugin
 response = requests.get(
     f"{REMOTE_REGISTRY_URL}/plugins/{name}/versions/{version}/download",
     headers={"Authorization": f"Bearer {token}"}
@@ -226,4 +228,4 @@ response = requests.get(
 
 ---
 
-**開發中** - 更多功能即將推出！
+**Work in progress** — more features coming soon.
